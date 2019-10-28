@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
 import './form_page.dart';
 import './state_container.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart'
+    show debugDefaultTargetPlatformOverride;
+
+/// If the current platform is desktop, override the default platform to
+/// a supported platform (iOS for macOS, Android for Linux and Windows).
+/// Otherwise, do nothing.
+void _setTargetPlatformForDesktop() {
+  TargetPlatform targetPlatform;
+  if (Platform.isMacOS) {
+    targetPlatform = TargetPlatform.iOS;
+  } else if (Platform.isLinux || Platform.isWindows) {
+    targetPlatform = TargetPlatform.android;
+  }
+  if (targetPlatform != null) {
+    debugDefaultTargetPlatformOverride = targetPlatform;
+  }
+}
 
 void main() {
+  _setTargetPlatformForDesktop();
   runApp(new StateContainer(child: new TodoApp(), users: new List<User>()));
 }
 
